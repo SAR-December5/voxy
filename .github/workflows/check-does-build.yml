@@ -30,3 +30,9 @@ jobs:
 
       - name: Gradle build
         run: ./gradlew -I init.gradle build
+
+      - name: Upload Voxy jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: voxy-1.20.1
+          path: build/libs/*.jar

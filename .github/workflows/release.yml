@@ -1,0 +1,54 @@
+name: Build Voxy 1.20.1
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+
+permissions:
+  contents: write
+
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # 下载源码
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: mc_1201
+
+
+      # Minecraft 1.20.1 Fabric 使用 Java 17
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+
+      # Gradle缓存
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+
+      # 编译
+      - name: Build
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build
+
+
+      # 保存jar
+      - name: Upload Voxy jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: voxy-1.20.1
+          path: build/libs/*.jar
